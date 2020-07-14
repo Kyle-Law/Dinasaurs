@@ -13,10 +13,20 @@ dino = new Dino();
 human = new Dino();
 
 // Use IIFE to get human data from form
-let humanData = (function getData() {
-  const listOfData = "data in the form";
+const humanObj = (function getData() {
+  const name = document.querySelector("#name").value;
+  const feet = document.querySelector("#feet").value;
+  const inches = document.querySelector("#inches").value;
+  const weight = document.querySelector("#weight").value;
+  const diet = document.querySelector("#diet").value;
 
-  // return data as an object
+  return {
+    name,
+    feet,
+    inches,
+    weight,
+    diet,
+  };
 })();
 
 // Create Dino Compare Method 1
@@ -44,7 +54,17 @@ function convertToInches(feet) {
 // Generate Tiles for each Dino in Array
 function generateTile(Array) {
   Array.forEach((dino) => {
-    const tile = "something";
+    // const tile = "something";
+    console.log("generating tile for " + dino.species.toLowerCase());
+    const div = document.createElement("div");
+    div.classList.add("grid-item");
+    const img = document.createElement("img");
+    img.setAttribute("src", `./images/${dino.species.toLowerCase()}.png`);
+    const p = document.createElement("p");
+    p.innerHTML = dino.fact;
+    div.appendChild(img);
+    div.appendChild(p);
+    grid.appendChild(div);
   });
 }
 // Add tiles to DOM
@@ -59,8 +79,29 @@ function removeForm() {
 
 // On button click, prepare and display infographic
 button.addEventListener("click", () => {
-  removeForm();
-  addTile("dino array here");
+  //   Remove Form
+  // Add Tiles
+  //   e.preventDefault();
+  const name = document.querySelector("#name").value;
+  const feet = document.querySelector("#feet").value;
+  const inches = document.querySelector("#inches").value;
+  const weight = document.querySelector("#weight").value;
+  const diet = document.querySelector("#diet").value;
+  console.log(name, feet, inches, weight, diet);
+  createHumanTile({ name, feet, inches, weight, diet });
+  fetchDino();
+  form.classList.add("display_none");
+  toggleBtn.classList.remove("display_none");
+  grid.classList.remove("display_none");
+});
+
+const toggleBtn = document.querySelector("#toggle");
+
+toggleBtn.addEventListener("click", () => {
+  form.classList.toggle("display_none");
+  toggleBtn.classList.toggle("display_none");
+  grid.classList.add("display_none");
+  grid.innerHTML = "";
 });
 
 // Steps from me
@@ -70,3 +111,40 @@ function swapDom() {
 }
 
 // Fetching Data from json file
+async function fetchDino() {
+  try {
+    // const res = await fetch("./dino.json");
+    // const data = res.json();
+    // console.log(data);
+    // console.log(data.Dinos);
+    fetch("./dino.json")
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+        console.log(data.Dinos);
+        // data.Dinos.forEach((dino) => {
+        //   console.log(dino.species);
+        // });
+
+        generateTile(data.Dinos);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Create Human Tile
+function createHumanTile(obj) {
+  const div = document.createElement("div");
+  div.classList.add("grid-item");
+  const img = document.createElement("img");
+  const h3 = document.createElement("h3");
+  img.setAttribute("src", `./images/human.png`);
+  h3.innerHTML = obj.name;
+  div.appendChild(img);
+  div.appendChild(h3);
+  grid.appendChild(div);
+}
+
+// On Load
+// fetchDino();
