@@ -1,10 +1,10 @@
-# Dinasour
+# Dinasours
 
 > A simple web app that allows users to compare themselves with dinasours.
 
 - Key in your details and click 'Compare Me!'
 - Randomized facts will be presented between you and the dinasours
-- This project is to give student real-world scenarios of working with object-oriented javascript. The functionality student will be using serves two purposes: to improve student's experience building objects with javascript as well as taking advantage of user interaction with the DOM.
+- This project is to improve my experience building objects with javascript as well as taking advantage of user interaction with the DOM.
 
 ## Snapshots
 
