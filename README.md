@@ -8,7 +8,7 @@
 
 ## Snapshots
 
-[Live Version]()
+[Live Version](https://rawcdn.githack.com/Kyle-Law/Dinasours/08dcf61157f9d2a93e65782c711ef261f372ee0f/index.html)
 
 ![image](https://user-images.githubusercontent.com/55923773/87528590-4ad95900-c6c0-11ea-9208-e1d6a0f31a5b.png)
 
