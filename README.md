@@ -17,6 +17,9 @@
 - Object-Oriented JavaScript
 - Interaction with the DOM
 - Interaction with local API
+- IIFE
+- Revealing module pattern
+- Factory Functions
 
 ## Built with
 
