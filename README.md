@@ -1,14 +1,14 @@
-# Dinasours
+# Dinasaurs
 
-> A simple web app that allows users to compare themselves with dinasours.
+> A simple web app that allows users to compare themselves with dinasaurs.
 
 - Key in your details and click 'Compare Me!'
-- Randomized facts will be presented between you and the dinasours
+- Randomized facts will be presented between you and the dinasaurs
 - This project is to improve my experience building objects with javascript as well as taking advantage of user interaction with the DOM.
 
 ## Snapshots
 
-[Live Version](https://rawcdn.githack.com/Kyle-Law/Dinasours/5d6185bfa5299eed0ef19113559b43c401363565/index.html)
+[Live Version](https://rawcdn.githack.com/Kyle-Law/Dinasaurs/29e42a800bfb5ed001343852c1ebc45af5016265/index.html)
 
 ![image](https://user-images.githubusercontent.com/55923773/87530017-60e81900-c6c2-11ea-9fb5-1188c8cc62f3.png)
 
