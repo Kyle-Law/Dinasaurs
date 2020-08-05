@@ -1,47 +1,53 @@
 const form = document.querySelector("#dino-compare");
 const grid = document.querySelector("#grid");
 const button = document.querySelector("#btn");
+// For new comparison button
+const toggleBtn = document.querySelector("#toggle");
 
-// Create Dino Constructor
-function Dino() {
-  this.constructor = "constructor";
+// Create Human Class
+function Human(name, weight, height, diet) {
+  this.name = name;
+  this.weight = weight;
+  this.height = height;
+  this.diet = diet;
 }
-// Create Dino Objects
-dino = new Dino();
 
-// Create Human Object
-human = new Dino();
+// Dinasour Class
+function Dinasaur(species, weight, height, diet, fact) {
+  this.species = species;
+  this.weight = weight;
+  this.height = height;
+  this.diet = diet;
+  this.fact = fact;
+
+  // Human.call(this, species, weight, height, diet);
+}
 
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches.
-function compareWeight(human, dino) {
-  return `${dino.species} is ${(dino.weight / human.weight + 1).toFixed(
+Dinasaur.prototype.compareWeight = function (human) {
+  return `${this.species} is ${(this.weight / human.weight + 1).toFixed(
     2
   )} times heavier than ${human.name}`;
-}
+};
 
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
-function compareHeight(human, dino) {
-  return `${dino.species} is ${(dino.height / human.height + 1).toFixed(
+Dinasaur.prototype.compareHeight = function (human) {
+  return `${this.species} is ${(this.height / human.height + 1).toFixed(
     2
   )} times taller than ${human.name}`;
-}
-
-// helper method
-function convertToInches(feet) {
-  return feet * 12;
-}
+};
 
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
-function compareDiet(human, dino) {
-  if (human.diet.toLowerCase() === dino.diet.toLowerCase()) {
-    return `${human.name} and ${dino.species} have the same diet, which is ${human.diet}`;
+Dinasaur.prototype.compareDiet = function (human) {
+  if (human.diet.toLowerCase() === this.diet.toLowerCase()) {
+    return `${human.name} and ${this.species} have the same diet, which is ${human.diet}`;
   } else {
-    return `${human.name}'s diet is ${human.diet} whereas ${dino.species}'s diet is ${dino.diet}`;
+    return `${human.name}'s diet is ${human.diet} whereas ${this.species}'s diet is ${this.diet}`;
   }
-}
+};
 
 // Generate Tiles for each Dino in Array
 function generateTile(Array, humanObj) {
@@ -54,63 +60,51 @@ function generateTile(Array, humanObj) {
     img.setAttribute("src", `./images/${dino.species.toLowerCase()}.png`);
     const p = document.createElement("p");
     // p.innerHTML = dino.fact;
-    p.innerHTML = randomizeFact(dino, humanObj);
+    const dinoObj = new Dinasaur(
+      dino.species,
+      dino.weight,
+      dino.height,
+      dino.diet,
+      dino.fact
+    );
+    p.innerHTML = randomizeFact(dinoObj, humanObj);
     div.appendChild(img);
     div.appendChild(p);
     grid.appendChild(div);
   });
 }
-// Add tiles to DOM
-function addTile(dino) {
-  return;
+
+// Create Human Tile
+function createHumanTile(obj) {
+  const div = document.createElement("div");
+  div.classList.add("grid-item");
+  const img = document.createElement("img");
+  const h3 = document.createElement("h3");
+  img.setAttribute("src", `./images/human.png`);
+  h3.textContent = obj.name;
+  div.appendChild(img);
+  div.appendChild(h3);
+  grid.appendChild(div);
 }
 
-// Remove form from screen
-function removeForm() {
-  return;
+// Generate Random Fact
+function randomizeFact(dino, human) {
+  if (dino.species === "Pigeon") {
+    return dino.fact;
+  }
+  switch (Math.floor(Math.random() * 4 + 1)) {
+    case 1:
+      return dino.compareWeight(human);
+    case 2:
+      return dino.compareHeight(human);
+    case 3:
+      return dino.compareDiet(human);
+    case 4:
+      return dino.fact;
+  }
 }
 
-// On button click, prepare and display infographic
-button.addEventListener("click", () => {
-  // Use IIFE to get human data from form
-  const humanObj = (function getData() {
-    const name = document.querySelector("#name").value;
-    const feet = document.querySelector("#feet").value;
-    const inches = document.querySelector("#inches").value;
-    const weight = document.querySelector("#weight").value;
-    const diet = document.querySelector("#diet").value;
-
-    return {
-      name,
-      height: convertToInches(feet) + inches,
-      weight,
-      diet,
-    };
-  })();
-  const height = convertToInches(feet) + inches;
-  createHumanTile(humanObj);
-  fetchDino(humanObj);
-  // Hide Form, Show Grid and new comparison button
-  form.classList.add("display_none");
-  toggleBtn.classList.remove("display_none");
-  grid.classList.remove("display_none");
-});
-
-// For new comparison button
-const toggleBtn = document.querySelector("#toggle");
-
-toggleBtn.addEventListener("click", () => {
-  form.classList.toggle("display_none");
-  toggleBtn.classList.toggle("display_none");
-  grid.classList.add("display_none");
-  grid.innerHTML = "";
-});
-
-// Swap betweem form and grid
-// function swapDom() {
-//   return;
-// }
-
+// API Calls
 // Fetching Data from json file
 async function fetchDino(humanObj) {
   try {
@@ -125,35 +119,35 @@ async function fetchDino(humanObj) {
   }
 }
 
-// Create Human Tile
-function createHumanTile(obj) {
-  const div = document.createElement("div");
-  div.classList.add("grid-item");
-  const img = document.createElement("img");
-  const h3 = document.createElement("h3");
-  img.setAttribute("src", `./images/human.png`);
-  h3.innerHTML = obj.name;
-  div.appendChild(img);
-  div.appendChild(h3);
-  grid.appendChild(div);
-}
+// Add Event Listeners
+// On button click, prepare and display infographic
+button.addEventListener("click", () => {
+  // Use IIFE to get human data from form
+  const humanObj = (function getData() {
+    const name = document.querySelector("#name").value;
+    const feet = document.querySelector("#feet").value;
+    const inches = document.querySelector("#inches").value;
+    const weight = document.querySelector("#weight").value;
+    const diet = document.querySelector("#diet").value;
+    // '+' converts string into integer
+    const height = +feet * 12 + +inches;
 
-// Generate Random Fact
-function randomizeFact(dino, human) {
-  if (dino.species === "Pigeon") {
-    return dino.fact;
-  }
-  switch (Math.floor(Math.random() * 4 + 1)) {
-    case 1:
-      return compareWeight(human, dino);
-    case 2:
-      return compareHeight(human, dino);
-    case 3:
-      return compareDiet(human, dino);
-    case 4:
-      return dino.fact;
-  }
-}
+    return new Human(name, weight, height, diet);
+  })();
+  createHumanTile(humanObj);
+  fetchDino(humanObj);
+  // Hide Form, Show Grid and new comparison button
+  form.classList.add("display_none");
+  toggleBtn.classList.remove("display_none");
+  grid.classList.remove("display_none");
+});
+
+toggleBtn.addEventListener("click", () => {
+  form.classList.toggle("display_none");
+  toggleBtn.classList.toggle("display_none");
+  grid.classList.add("display_none");
+  grid.innerHTML = "";
+});
 
 // On Load
 // fetchDino();
